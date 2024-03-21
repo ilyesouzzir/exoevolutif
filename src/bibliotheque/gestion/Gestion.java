@@ -231,7 +231,17 @@ public class Gestion {
             }
            louv.add(o);
         System.out.println("ouvrage créé");
-        //TODO ajouter 1 auteur à la liste des auteurs
+
+
+        System.out.println("nom de l'auteur ");
+        String nom=sc.nextLine();
+        System.out.println("prénom de l'auteur ");
+        String prenom=sc.nextLine();
+        System.out.println("nationalité de l'auteur");
+        String nat=sc.nextLine();
+        Auteur a  = new Auteur(nom,prenom,nat);
+        laut.add(a);
+        System.out.println("auteur ajouté à la liste des auteurs");
     }
 
        private void gestAuteurs() {
