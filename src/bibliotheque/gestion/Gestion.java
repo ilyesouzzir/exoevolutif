@@ -254,14 +254,14 @@ public class Gestion {
         System.out.println("ouvrage créé");
 
 
-        System.out.println("nom de l'auteur ");
-        String nom = sc.nextLine();
-        System.out.println("prénom de l'auteur ");
-        String prenom = sc.nextLine();
-        System.out.println("nationalité de l'auteur");
-        String nat = sc.nextLine();
-        Auteur a = new Auteur(nom, prenom, nat);
-        laut.add(a);
+        gestAuteurs();
+
+        Auteur a = laut.get(laut.size() - 1);
+
+        o.getLauteurs().add(a);
+
+        a.getLouvrage().add(o);
+
         System.out.println("auteur ajouté à la liste des auteurs");
     }
 
