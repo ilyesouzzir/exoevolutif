@@ -1,20 +1,18 @@
 package bibliotheque.metier;
 
 import java.time.LocalDate;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class Lecteur {
     private int numlecteur;
-    private String nom, prenom;
+    private  String nom,prenom;
     private LocalDate dn;
     private String adresse;
     private String mail;
     private String tel;
 
-    // Utilisation de HashMap pour stocker les locations avec l'exemplaire comme clé et le lecteur-loueur comme valeur
-    public static final Map<Exemplaire, Lecteur> locations = new HashMap<>();
 
     public Lecteur(int numlecteur, String nom, String prenom, LocalDate dn, String adresse, String mail, String tel) {
         this.numlecteur = numlecteur;
@@ -82,7 +80,7 @@ public class Lecteur {
         this.tel = tel;
     }
 
-    @Override
+        @Override
     public String toString() {
         return "Lecteur{" +
                 "numlecteur=" + numlecteur +
@@ -107,24 +105,5 @@ public class Lecteur {
     public int hashCode() {
         return Objects.hash(numlecteur);
     }
-    // Méthode pour louer un exemplaire
-    public void louerExemplaire(Exemplaire exemplaire) {
-        if (!Exemplaire.locations.containsKey(exemplaire)) {
-            Exemplaire.locations.put(exemplaire, this);
-            System.out.println("Exemplaire loué avec succès.");
-        } else {
-            System.out.println("Cet exemplaire est déjà loué.");
-        }
-    }
 
-    // Méthode pour restituer un exemplaire
-    public void restituerExemplaire(Exemplaire exemplaire) {
-        if (Exemplaire.locations.containsKey(exemplaire)) {
-            Exemplaire.locations.remove(exemplaire);
-            System.out.println("Exemplaire restitué avec succès.");
-        } else {
-            System.out.println("Cet exemplaire n'est pas actuellement loué.");
-        }
-    }
 }
-
