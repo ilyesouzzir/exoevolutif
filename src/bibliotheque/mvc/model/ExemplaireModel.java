@@ -1,18 +1,16 @@
 package bibliotheque.mvc.model;
 
-import bibliotheque.metier.Auteur;
-import bibliotheque.metier.Ouvrage;
+import bibliotheque.metier.Exemplaire;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
-public class OuvrageModel extends DAOOuvrage {
+public class ExemplaireModel extends DAOExemplaire {
 
-    private List<Ouvrage> ldatas = new ArrayList<>();
+    private List<Exemplaire> ldatas = new ArrayList<>();
 
     @Override
-    public Ouvrage add(Ouvrage elt) {
+    public Exemplaire add(Exemplaire elt) {
         boolean present = ldatas.contains(elt);
         if (!present) {
             ldatas.add(elt);
@@ -22,14 +20,14 @@ public class OuvrageModel extends DAOOuvrage {
     }
 
     @Override
-    public boolean remove(Ouvrage elt) {
+    public boolean remove(Exemplaire elt) {
         boolean ok = ldatas.remove(elt);
         notifyObservers();
         return ok;
     }
 
     @Override
-    public Ouvrage update(Ouvrage elt) {
+    public Exemplaire update(Exemplaire elt) {
         int p = ldatas.indexOf(elt);
         if (p < 0) return null;
         ldatas.set(p, elt);
@@ -38,27 +36,14 @@ public class OuvrageModel extends DAOOuvrage {
     }
 
     @Override
-    public Ouvrage read(Ouvrage rech) {
+    public Exemplaire read(Exemplaire rech) {
         int p = ldatas.indexOf(rech);
-        if (p < 0) return null;
+        if(p<0) return null;
         return ldatas.get(p);
     }
 
     @Override
-    public List<Ouvrage> getAll() {
+    public List<Exemplaire> getAll() {
         return ldatas;
     }
-
-    @Override
-    public Set<Auteur> listerAuteurs(Ouvrage o) {
-        return Set.of();
-    }
 }
-/*
-    @Override
-    public Set<Auteur> listerAuteurs(Ouvrage o) {
-        return o.listerAuteurs();
-    }
-}
-
- */

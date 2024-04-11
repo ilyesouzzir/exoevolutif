@@ -1,18 +1,17 @@
 package bibliotheque.mvc.model;
 
-import bibliotheque.metier.Auteur;
-import bibliotheque.metier.Ouvrage;
+import bibliotheque.metier.Livre;
+import bibliotheque.metier.TypeLivre;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
-public class OuvrageModel extends DAOOuvrage {
+public class LivreModel extends DAOLivre {
 
-    private List<Ouvrage> ldatas = new ArrayList<>();
+    private List<Livre> ldatas = new ArrayList<>();
 
     @Override
-    public Ouvrage add(Ouvrage elt) {
+    public Livre add(Livre elt) {
         boolean present = ldatas.contains(elt);
         if (!present) {
             ldatas.add(elt);
@@ -22,14 +21,14 @@ public class OuvrageModel extends DAOOuvrage {
     }
 
     @Override
-    public boolean remove(Ouvrage elt) {
+    public boolean remove(Livre elt) {
         boolean ok = ldatas.remove(elt);
         notifyObservers();
         return ok;
     }
 
     @Override
-    public Ouvrage update(Ouvrage elt) {
+    public Livre update(Livre elt) {
         int p = ldatas.indexOf(elt);
         if (p < 0) return null;
         ldatas.set(p, elt);
@@ -38,27 +37,25 @@ public class OuvrageModel extends DAOOuvrage {
     }
 
     @Override
-    public Ouvrage read(Ouvrage rech) {
+    public Livre read(Livre rech) {
         int p = ldatas.indexOf(rech);
-        if (p < 0) return null;
+        if(p<0) return null;
         return ldatas.get(p);
     }
 
     @Override
-    public List<Ouvrage> getAll() {
+    public List<Livre> getAll() {
         return ldatas;
     }
 
     @Override
-    public Set<Auteur> listerAuteurs(Ouvrage o) {
-        return Set.of();
+    public List<Livre> listerLivre(TypeLivre tl) {
+        List<Livre> result = new ArrayList<>();
+        for (Livre livre : ldatas) {
+            if (livre.getIsbn().equals(tl)) {
+                result.add(livre);
+            }
+        }
+        return result;
     }
 }
-/*
-    @Override
-    public Set<Auteur> listerAuteurs(Ouvrage o) {
-        return o.listerAuteurs();
-    }
-}
-
- */

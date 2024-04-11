@@ -15,8 +15,8 @@ public class AuteurModel extends DAOAuteur {
 
 
     @Override
-    public Auteur add( Auteur elt) {
-        boolean present =ldatas.contains(elt);
+    public Auteur add(Auteur elt) {
+        boolean present = ldatas.contains(elt);
         if (!present) {
             ldatas.add(elt);
             notifyObservers();
@@ -25,7 +25,7 @@ public class AuteurModel extends DAOAuteur {
     }
 
     @Override
-    public boolean remove( Auteur elt) {
+    public boolean remove(Auteur elt) {
         boolean ok = ldatas.remove(elt);
         notifyObservers();
         return ok;
@@ -43,7 +43,7 @@ public class AuteurModel extends DAOAuteur {
     @Override
     public Auteur read(Auteur rech) {
         int p = ldatas.indexOf(rech);
-        if(p<0) return null;
+        if (p < 0) return null;
         return ldatas.get(p);
     }
 
