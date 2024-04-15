@@ -60,7 +60,7 @@ public class Gestion {
         e.setRayon(r);
 
 
-        r = new Rayon("r45", "science fiction");
+        r = new Rayon("r45",  "science fiction");
         lrayon.add(r);
 
         e = new Exemplaire("d12", "griffé", d);
