@@ -1,14 +1,10 @@
 package bibliotheque.mvc.view;
 
-import bibliotheque.metier.Exemplaire;
-import bibliotheque.metier.Mail;
-import bibliotheque.metier.Ouvrage;
-import bibliotheque.metier.Rayon;
+import bibliotheque.metier.*;
 import bibliotheque.mvc.GestionMVC;
 import bibliotheque.mvc.controller.ControllerSpecialExemplaire;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Scanner;
+
+import java.util.*;
 
 
 import static bibliotheque.utilitaires.Utilitaire.*;
@@ -102,12 +98,18 @@ public class ExemplaireViewConsole extends AbstractView<Exemplaire> {
                 String descr = sc.nextLine();
                 System.out.println("ouvrage : ");
                 List<Ouvrage> lo = GestionMVC.ov.getAll();
-                //TODO présenter les ouvrages par ordre de titre ==> classe anonyme
+                Collections.sort(lo, Comparator.comparing(Ouvrage::getTitre));
                 int ch = choixListe(lo);
                 a = new Exemplaire(mat, descr,lo.get(ch-1));
                 System.out.println("rayon");
                 List<Rayon> lr = GestionMVC.rv.getAll();
-                //TODO présenter les rayons par ordre de code ==> classe anonyme
+               lr.sort(new Comparator<Rayon>() {
+                   @Override
+                   public int compare(Rayon o1, Rayon o2) {
+                       return o1.getCodeRayon().compareTo(o2.getCodeRayon());
+
+                   }
+               });
                 ch= choixListe(lr);
                 a.setRayon(lr.get(ch-1));
                 break;
@@ -155,7 +157,17 @@ public class ExemplaireViewConsole extends AbstractView<Exemplaire> {
    }
 
     private void louer(Exemplaire a) {
-        //TODO chosir un lecteur et enregistrer la location dans LOCATIONS
+        // Récupérer tous les Lecteurs
+        List<Lecteur> lecteurs = GestionMVC.lv.getAll();
+
+        // Inviter l'utilisateur à sélectionner un Lecteur
+        System.out.println("Choisissez un Lecteur:");
+        int ch = choixListe(lecteurs);
+
+        // Récupérer le Lecteur sélectionné
+        Lecteur lecteurchoisi = lecteurs.get(ch - 1);
+
+       GestionMVC.LOCATIONS.put(a, lecteurchoisi);
     }
 
 
