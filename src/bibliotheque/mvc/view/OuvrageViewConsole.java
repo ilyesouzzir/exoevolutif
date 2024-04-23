@@ -1,15 +1,14 @@
 package bibliotheque.mvc.view;
 
+import bibliotheque.metier.Auteur;
 import bibliotheque.metier.Exemplaire;
 import bibliotheque.metier.Ouvrage;
 import bibliotheque.metier.TypeOuvrage;
+import bibliotheque.mvc.GestionMVC;
 import bibliotheque.mvc.controller.ControllerSpecialOuvrage;
 import bibliotheque.utilitaires.*;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 import static bibliotheque.utilitaires.Utilitaire.*;
 
@@ -93,7 +92,6 @@ public class OuvrageViewConsole extends AbstractView<Ouvrage> {
         controller.update(a);
    }
 
-
     public void ajouter() {
         TypeOuvrage[] tto = TypeOuvrage.values();
         List<TypeOuvrage> lto = new ArrayList<>(Arrays.asList(tto));
@@ -101,9 +99,32 @@ public class OuvrageViewConsole extends AbstractView<Ouvrage> {
         Ouvrage a = null;
         List<OuvrageFactory> lof = new ArrayList<>(Arrays.asList(new LivreFactory(),new CDFactory(),new DVDFactory()));
         a = lof.get(choix-1).create();
-        //TODO affecter un ou plusieurs auteurs
-        //TODO trier les auteurs présentés par ordre de nom et prénom  ==>  classe anonyme
-        //TODO ne pas présenter les auteurs déjà enregistrés pour cet ouvrage
+
+        // Récupérer tous les auteurs
+        List<Auteur> auteurs = GestionMVC.av.getAll();
+
+        // Trier les auteurs par nom et prénom
+        auteurs.sort(Comparator.comparing(Auteur::getNom).thenComparing(Auteur::getPrenom));
+
+        // Ne pas présenter les auteurs déjà enregistrés pour cet ouvrage
+        auteurs.removeAll(a.getLauteurs());
+
+        // Inviter l'utilisateur à sélectionner un ou plusieurs auteurs
+        System.out.println("Choisissez un ou plusieurs auteurs:");
+        List<Auteur> auteursChoisis = new ArrayList<>();
+        do {
+            int ch = choixListe(auteurs);
+            auteursChoisis.add(auteurs.get(ch - 1));
+            System.out.println("Voulez-vous ajouter un autre auteur ? (oui/non)");
+            String reponse = sc.nextLine();
+            if (!reponse.equalsIgnoreCase("oui")) {
+                break;
+            }
+        } while (true);
+
+        // Affecter les auteurs choisis à l'ouvrage
+        a.setLauteurs(auteursChoisis);
+
         controller.add(a);
     }
 
