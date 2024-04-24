@@ -112,7 +112,8 @@ public class OuvrageViewConsole extends AbstractView<Ouvrage> {
         Ouvrage o = null;
         List<OuvrageFactory> lof = new ArrayList<>(Arrays.asList(new LivreFactory(),new CDFactory(),new DVDFactory()));
         o = lof.get(choix-1).create();
-        List<Auteur> la= av.getAll();
+        Comparator<Auteur> auteurComparator = Comparator.comparing(Auteur::getNom);
+        List<Auteur> la = av.getAll(auteurComparator);
         la.sort((Auteur o1, Auteur o2) -> {
             if (o1.getNom().equals(o2.getNom())) return o1.getPrenom().compareTo(o2.getPrenom());
             return o1.getNom().compareTo(o2.getNom());

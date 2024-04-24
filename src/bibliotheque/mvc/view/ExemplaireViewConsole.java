@@ -100,12 +100,14 @@ public class ExemplaireViewConsole extends AbstractView<Exemplaire> {
                 System.out.println("description ");
                 String descr = sc.nextLine();
                 System.out.println("ouvrage : ");
-                List<Ouvrage> lo = GestionMVC.ov.getAll();
+                Comparator<Ouvrage> ouvrageComparator = Comparator.comparing(Ouvrage::getTitre);
+                List<Ouvrage> lo = GestionMVC.ov.getAll(ouvrageComparator);
                 lo.sort((Ouvrage o1, Ouvrage o2) -> o1.getTitre().compareTo(o2.getTitre()));
                 int ch = choixListe(lo);
                 a = new Exemplaire(mat, descr,lo.get(ch-1));
                 System.out.println("rayon");
-                List<Rayon> lr = GestionMVC.rv.getAll();
+                Comparator<Rayon> rayonComparator = Comparator.comparing(Rayon::getCodeRayon);
+                List<Rayon> lr = GestionMVC.rv.getAll(rayonComparator);
                 lr.sort((Rayon o1, Rayon o2) -> o1.getCodeRayon().compareTo(o2.getCodeRayon()));
                 ch= choixListe(lr);
                 a.setRayon(lr.get(ch-1));
@@ -154,7 +156,8 @@ public class ExemplaireViewConsole extends AbstractView<Exemplaire> {
    }
 
     private void louer(Exemplaire a) {
-        List<Lecteur> llec= lv.getAll();
+        Comparator<Lecteur> lecteurComparator = Comparator.comparingInt(Lecteur::getNumlecteur);
+        List<Lecteur> llec = lv.getAll(lecteurComparator);
         llec.sort(new Comparator<Lecteur>() {
             @Override
             public int compare(Lecteur o1, Lecteur o2) {
