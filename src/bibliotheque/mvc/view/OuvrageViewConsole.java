@@ -1,15 +1,12 @@
 package bibliotheque.mvc.view;
 
-import bibliotheque.metier.Auteur;
-import bibliotheque.metier.Exemplaire;
-import bibliotheque.metier.Ouvrage;
-import bibliotheque.metier.TypeOuvrage;
-import bibliotheque.mvc.GestionMVC;
+import bibliotheque.metier.*;
 import bibliotheque.mvc.controller.ControllerSpecialOuvrage;
 import bibliotheque.utilitaires.*;
 
 import java.util.*;
 
+import static bibliotheque.mvc.GestionMVC.av;
 import static bibliotheque.utilitaires.Utilitaire.*;
 
 
@@ -57,23 +54,38 @@ public class OuvrageViewConsole extends AbstractView<Ouvrage> {
 
 
     public void rechercher() {
-        // Ask the user for the type of ouvrage
-        System.out.println("Veuillez entrer le type d'ouvrage :");
-        String type = sc.nextLine();
+        TypeOuvrage[] tto = TypeOuvrage.values();
+        List<TypeOuvrage> lto = Arrays.asList(tto);
+        int choix = Utilitaire.choixListe(lto);
+        Ouvrage o=null;
+        switch (choix){
+            case 1 :
+                System.out.print("isbn :");
+                String isbn = sc.nextLine();
+                o=new Livre("",0,null,0,"","",isbn,0, TypeLivre.ROMAN,"");
+                break;
 
-        // Ask the user for the unique information related to the type of ouvrage
-        System.out.println("Veuillez entrer l'information unique relative au type d'ouvrage :");
-        String info = sc.nextLine();
+            case 2 :
+                System.out.print("code :");
+                int codecd = lireInt();
+                o=new CD("",0,null,0,"","",codecd,(byte)0, null);
+                break;
+            case 3 :
+                System.out.print("code :");
+                int codedvd = lireInt();
+                o=new DVD("",0,null,0,"","",codedvd, null,(byte)0);
+                break;
 
-        // Search for the ouvrage
-        Ouvrage ouvrage = controller.search(type, info);
-
-        // Print the ouvrage if found
-        if (ouvrage != null) {
-            System.out.println("Ouvrage trouvé : " + ouvrage);
-        } else {
-            System.out.println("Aucun ouvrage trouvé avec le type '" + type + "' et l'information '" + info + "'.");
         }
+        o=controller.search(o);
+        if(o!=null){
+            affMsg(o.toString());
+        }
+        else {
+            affMsg("ouvrage inconnu");
+        }
+        //TODO réalisé
+
     }
 
 
@@ -92,40 +104,35 @@ public class OuvrageViewConsole extends AbstractView<Ouvrage> {
         controller.update(a);
    }
 
+
     public void ajouter() {
         TypeOuvrage[] tto = TypeOuvrage.values();
-        List<TypeOuvrage> lto = new ArrayList<>(Arrays.asList(tto));
+        List<TypeOuvrage> lto = Arrays.asList(tto);
         int choix = Utilitaire.choixListe(lto);
-        Ouvrage a = null;
+        Ouvrage o = null;
         List<OuvrageFactory> lof = new ArrayList<>(Arrays.asList(new LivreFactory(),new CDFactory(),new DVDFactory()));
-        a = lof.get(choix-1).create();
-
-        // Récupérer tous les auteurs
-        List<Auteur> auteurs = GestionMVC.av.getAll();
-
-        // Trier les auteurs par nom et prénom
-        auteurs.sort(Comparator.comparing(Auteur::getNom).thenComparing(Auteur::getPrenom));
-
-        // Ne pas présenter les auteurs déjà enregistrés pour cet ouvrage
-        auteurs.removeAll(a.getLauteurs());
-
-        // Inviter l'utilisateur à sélectionner un ou plusieurs auteurs
-        System.out.println("Choisissez un ou plusieurs auteurs:");
-        List<Auteur> auteursChoisis = new ArrayList<>();
+        o = lof.get(choix-1).create();
+        List<Auteur> la= av.getAll();
+        la.sort(new Comparator<Auteur>() {
+                    @Override
+                    public int compare(Auteur o1, Auteur o2) {
+                        if (o1.getNom().equals(o2.getNom())) return o1.getPrenom().compareTo(o2.getPrenom());
+                        return o1.getNom().compareTo(o2.getNom());
+                    }
+                });
         do {
-            int ch = choixListe(auteurs);
-            auteursChoisis.add(auteurs.get(ch - 1));
-            System.out.println("Voulez-vous ajouter un autre auteur ? (oui/non)");
-            String reponse = sc.nextLine();
-            if (!reponse.equalsIgnoreCase("oui")) {
-                break;
+            Iterator<Auteur> ita = la.iterator();
+            while (ita.hasNext()) {
+                Auteur a = ita.next();
+                if (o.getLauteurs().contains(a)) ita.remove();
             }
-        } while (true);
+            int ch = choixListe(la);
+            if (ch == 0) break;
+            o.addAuteur(la.get(ch-1));
+        }while(true);
 
-        // Affecter les auteurs choisis à l'ouvrage
-        a.setLauteurs(auteursChoisis);
-
-        controller.add(a);
+        //TODO utiliser Lambda
+        controller.add(o);
     }
 
     protected void special() {

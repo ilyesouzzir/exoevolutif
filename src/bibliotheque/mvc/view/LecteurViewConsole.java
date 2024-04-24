@@ -72,30 +72,26 @@ public class LecteurViewConsole extends AbstractView<Lecteur> {
 
     }
 
+
     public void modifier() {
         int choix = choixElt(la);
         Lecteur l  = la.get(choix-1);
-        do {
+         do {
             try {
                 String nom = modifyIfNotBlank("nom", l.getNom());
                 String prenom = modifyIfNotBlank("prénom", l.getPrenom());
-                String mail = modifyIfNotBlank("mail", l.getMail());
-                String adresse = modifyIfNotBlank("adresse", l.getAdresse());
-                String tel = modifyIfNotBlank("tel", l.getTel());
+                String mail = modifyIfNotBlank("nationalité", l.getMail());
                 l.setNom(nom);
                 l.setPrenom(prenom);
                 l.setMail(mail);
-                l.setAdresse(adresse);
-                l.setTel(tel);
-
-
+                //TODO gérer autres valeurs
                 break;
             } catch (Exception e) {
                 System.out.println("erreur :" + e);
             }
-        } while(true);
+        }while(true);
         controller.update(l);
-    }
+   }
 
 
     public void ajouter() {

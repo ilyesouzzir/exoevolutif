@@ -13,7 +13,7 @@ import static bibliotheque.utilitaires.Utilitaire.choixListe;
 public class GestionOld {
     Scanner sc = new Scanner(System.in);
 //on a ôté static pour les listes qui n'est plus nécessaire
-    private List<Auteur> laut =  new ArrayList<>();
+    private List<Auteur> laut = new ArrayList<>();
     private List<Lecteur> llect = new ArrayList<>();
     private List<Ouvrage> louv= new ArrayList<>();
     private List<Exemplaire> lex = new ArrayList<>();
@@ -96,32 +96,7 @@ public class GestionOld {
     }
 
     private void gestRestitution() {
-        // Lister les exemplaires en location
-        List<Exemplaire> exemplairesEnLocation = new ArrayList<>();
-        for (Exemplaire ex : lex) {
-            if (LOCATIONS.containsKey(ex)) {
-                exemplairesEnLocation.add(ex);
-            }
-        }
-
-        // Choisir un exemplaire pour la restitution
-        System.out.println("Choisissez un exemplaire pour la restitution :");
-        int choix = choixListe(exemplairesEnLocation);
-        Exemplaire exemplaireChoisi = exemplairesEnLocation.get(choix - 1);
-
-        // Enregistrer la restitution
-        LOCATIONS.remove(exemplaireChoisi);
-        System.out.println("La restitution de l'exemplaire a été enregistrée.");
-
-        // Demander à l'utilisateur s'il souhaite changer l'état de l'exemplaire
-        System.out.println("Souhaitez-vous changer l'état de l'exemplaire ? (oui/non)");
-        String reponse = sc.nextLine();
-        if (reponse.equalsIgnoreCase("oui")) {
-            System.out.println("Entrez le nouvel état de l'exemplaire :");
-            String nouvelEtat = sc.nextLine();
-            exemplaireChoisi.setDescriptionEtat(nouvelEtat);
-            System.out.println("L'état de l'exemplaire a été mis à jour.");
-        }
+        //TODO lister exemplaires en location , choisir l'un d'entre eux, enregistrer sa restitution et éventuellement changer état
     }
 
     private void gestLocations() {
