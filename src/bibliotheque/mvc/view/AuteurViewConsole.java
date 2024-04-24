@@ -1,6 +1,7 @@
 package bibliotheque.mvc.view;
 
 import bibliotheque.metier.Auteur;
+import bibliotheque.metier.Ouvrage;
 import bibliotheque.metier.TypeLivre;
 import bibliotheque.mvc.controller.ControllerSpecialAuteur;
 
@@ -8,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 import static bibliotheque.utilitaires.Utilitaire.*;
 
@@ -139,24 +141,30 @@ public class AuteurViewConsole extends AbstractView<Auteur> {
 
     }
 
-
     public void listerGenre(Auteur a) {
         System.out.println("genre :");
         String genre = sc.nextLine();
-        affListe(new ArrayList(((ControllerSpecialAuteur)controller).listerOuvrages(a,genre)));
+        List<Ouvrage> ouvrages = new ArrayList<>(((ControllerSpecialAuteur)controller).listerOuvrages(a));
+        List<Ouvrage> filteredOuvrages = ouvrages.stream()
+                .filter(o -> o.getGenre().equals(genre))
+                .collect(Collectors.toList());
+        affListe(filteredOuvrages);
     }
-
 
     public void listerOuvrages(Auteur a){
-        affList(new ArrayList(((ControllerSpecialAuteur)controller).listerOuvrages(a)));
+        List<Ouvrage> ouvrages = new ArrayList<>(((ControllerSpecialAuteur)controller).listerOuvrages(a));
+        affList(ouvrages);
     }
-
 
     public void listerLivres(Auteur a){
         TypeLivre[] tlv = TypeLivre.values();
         int ch2 = choixListe(List.of(tlv));
         TypeLivre tl = tlv[ch2-1];
-        affList(new ArrayList(((ControllerSpecialAuteur)controller).listerLivre(a,tl)));
+        List<Ouvrage> ouvrages = new ArrayList<>(((ControllerSpecialAuteur)controller).listerLivre(a, tl));
+        List<Ouvrage> filteredOuvrages = ouvrages.stream()
+                .filter(o -> o.getTo().equals(tl))
+                .collect(Collectors.toList());
+        affList(filteredOuvrages);
     }
 
     @Override
