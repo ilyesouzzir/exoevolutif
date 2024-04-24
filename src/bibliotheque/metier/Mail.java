@@ -39,17 +39,8 @@ public class Mail {
     public void setDateEnvoi(String dateEnvoi) {
         this.dateEnvoi = dateEnvoi;
     }
-    public void envoi(String emailDestinataire) {
-        String contenuEmail = "Objet: " + objet + "\n\n" + message;
 
-        Path cheminFichier = Paths.get(emailDestinataire + ".txt");
 
-        try {
-            Files.write(cheminFichier, contenuEmail.getBytes());
-        } catch (IOException e) {
-            System.out.println("Une erreur s'est produite lors de l'envoi de l'e-mail: " + e.getMessage());
-        }
-    }
     @Override
     public String toString() {
         return "Mail{" +
